@@ -1,0 +1,19 @@
+databases:
+  - name: mern-crud-db
+    plan: free
+    databaseName: mern_crud
+
+services:
+  - type: web
+    name: mern-crud-app
+    plan: free
+    runtime: node
+    buildCommand: npm run render-build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mern-crud-db
+          property: connectionString
