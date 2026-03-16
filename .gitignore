@@ -4,3 +4,5 @@ client/dist/
 client/node_modules/
 DEPLOY-DIGITAL.md
 server/data/
+server/uploads/*
+!server/uploads/.gitkeep

@@ -26,6 +26,7 @@ function wrapItem(items, rawItem) {
       if (idx === -1) throw new Error("Item not found");
       if (data.name !== undefined) all[idx].name = data.name;
       if (data.description !== undefined) all[idx].description = data.description;
+      if (data.imageUrl !== undefined) all[idx].imageUrl = data.imageUrl;
       if (data.done !== undefined) all[idx].done = data.done;
       all[idx].updatedAt = new Date().toISOString();
       writeItems(all);
@@ -53,13 +54,14 @@ const Item = {
     return Promise.resolve(item ? wrapItem(items, item) : null);
   },
 
-  create({ name, description = "" }) {
+  create({ name, description = "", imageUrl = "" }) {
     if (!name) return Promise.reject(new Error("name is required"));
     const items = readItems();
     const newItem = {
       id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
       name,
       description,
+      imageUrl,
       done: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

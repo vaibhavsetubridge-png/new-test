@@ -10,6 +10,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Serve uploaded images as static files at /uploads/*
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use("/api/items", itemRoutes);
 
 // Serve React build in production
