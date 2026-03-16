@@ -26,6 +26,7 @@ function wrapItem(items, rawItem) {
       if (idx === -1) throw new Error("Item not found");
       if (data.name !== undefined) all[idx].name = data.name;
       if (data.description !== undefined) all[idx].description = data.description;
+      if (data.done !== undefined) all[idx].done = data.done;
       all[idx].updatedAt = new Date().toISOString();
       writeItems(all);
       Object.assign(this, all[idx]);
@@ -59,6 +60,7 @@ const Item = {
       id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
       name,
       description,
+      done: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

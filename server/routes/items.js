@@ -45,6 +45,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// TOGGLE done status
+router.patch("/:id/toggle", async (req, res) => {
+  try {
+    const item = await Item.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: "Item not found" });
+    await item.update({ done: !item.done });
+    res.json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // DELETE item
 router.delete("/:id", async (req, res) => {
   try {
