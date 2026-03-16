@@ -1,16 +1,2 @@
-const { DataTypes } = require("sequelize");
-
-module.exports = (sequelize) => {
-  const Item = sequelize.define("Item", {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      defaultValue: "", 
-    },
-  });
-
-  return Item;
-};
+// Item schema: { id, name, description, createdAt, updatedAt }
+// Data is persisted in server/data/items.json via the file store in server/db.js

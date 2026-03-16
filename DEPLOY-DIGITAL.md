@@ -31,19 +31,108 @@ DigitalOcean App Platform is a managed cloud hosting service (like Render) — n
 
 ---
 
-## Step 2: Update Your App for MySQL
+## Step 2: Add Your Custom Express.js Code
+
+Before deploying, add your custom routes, models, and API endpoints to the app locally.
+
+### 2.1: Add Custom Routes
+
+1. Open `server/routes/items.js` and add your custom route handlers:
+
+```javascript
+// Example: Add a custom endpoint
+router.get('/custom', (req, res) => {
+  // Your custom logic here
+  res.json({ message: 'Custom endpoint working' });
+});
+```
+
+2. Or create a new route file `server/routes/[yourfeature].js`:
+
+```javascript
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+  // Your logic
+  res.json({ data: 'Your feature data' });
+});
+
+module.exports = router;
+```
+
+3. Then import it in `server/index.js`:
+
+```javascript
+const yourFeatureRoutes = require('./routes/yourfeature');
+app.use('/api/yourfeature', yourFeatureRoutes);
+```
+
+### 2.2: Add Custom Database Models
+
+1. Create a new model file `server/models/YourModel.js`:
+
+```javascript
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
+  return sequelize.define('YourModel', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    // Add your columns here
+  });
+};
+```
+
+2. Import it in `server/db.js`:
+
+```javascript
+const YourModel = require('./models/YourModel')(sequelize);
+
+module.exports = { sequelize, Item, YourModel };
+```
+
+### 2.3: Test Locally
+
+```bash
+# Start the development server
+npm run dev:server
+
+# In another terminal, start the React client
+npm run dev:client
+
+# Test your API endpoints at http://localhost:5000/api/yourfeature
+```
+
+### 2.4: Commit Your Changes
+
+```bash
+git add .
+git commit -m "Add custom Express.js features"
+git push origin main
+```
+
+---
+
+## Step 3: Update Your App for MySQL
 
 Before deploying, switch the app from PostgreSQL to MySQL locally.
 
-### Install MySQL driver
+### 3.1: Install MySQL driver
 
 ```bash
-cd "/home/vaibhav/coding shoding /demo"
 npm install mysql2
 npm uninstall pg
 ```
 
-### Update `server/db.js`
+### 3.2: Update `server/db.js`
 
 Replace contents with:
 
@@ -67,7 +156,7 @@ const Item = require("./models/Item")(sequelize);
 module.exports = { sequelize, Item };
 ```
 
-### Update `package.json`
+### 3.3: Update `package.json`
 
 In the `dependencies` section, replace `"pg"` with `"mysql2"`:
 
@@ -77,7 +166,7 @@ In the `dependencies` section, replace `"pg"` with `"mysql2"`:
 
 (Remove the `"pg"` line)
 
-### Push changes
+### 3.4: Push changes
 
 ```bash
 git add .
@@ -87,7 +176,7 @@ git push origin main
 
 ---
 
-## Step 3: Create an App on App Platform
+## Step 4: Create an App on App Platform
 
 1. Go to [cloud.digitalocean.com](https://cloud.digitalocean.com)
 2. Click **Apps** in the left sidebar → **Create App**
@@ -98,7 +187,7 @@ git push origin main
 
 ---
 
-## Step 4: Configure the App Component
+## Step 5: Configure the App Component
 
 DigitalOcean will auto-detect your app. You may see multiple components — keep only the **web service**.
 
@@ -111,7 +200,7 @@ DigitalOcean will auto-detect your app. You may see multiple components — keep
 
 ---
 
-## Step 5: Add Environment Variables
+## Step 6: Add Environment Variables
 
 Click **Environment Variables** and add:
 
@@ -125,7 +214,7 @@ Click **Environment Variables** and add:
 
 ---
 
-## Step 6: Deploy
+## Step 7: Deploy
 
 1. Review everything → click **Create Resources**
 2. DigitalOcean will build and deploy your app
@@ -135,7 +224,7 @@ Click **Environment Variables** and add:
 
 ---
 
-## Step 7: Access phpMyAdmin
+## Step 8: Access phpMyAdmin
 
 DigitalOcean doesn't include phpMyAdmin, but you have two options:
 
@@ -161,7 +250,7 @@ Connect DBeaver to your DigitalOcean MySQL using the connection string details. 
 
 ---
 
-## Step 8: Set Up a Custom Domain (Optional)
+## Step 9: Set Up a Custom Domain (Optional)
 
 1. In your App settings → **Domains** → **Add Domain**
 2. Enter your domain (e.g. `yourapp.com`)
@@ -170,7 +259,7 @@ Connect DBeaver to your DigitalOcean MySQL using the connection string details. 
 
 ---
 
-## Step 9: Redeploying After Changes
+## Step 10: Redeploying After Changes
 
 ```bash
 git add .

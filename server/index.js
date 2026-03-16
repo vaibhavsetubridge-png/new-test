@@ -1,9 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config();
 
-const { sequelize } = require("./db");
 const itemRoutes = require("./routes/items");
 
 const app = express();
@@ -22,10 +20,4 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Database synced");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch((err) => console.error("Database connection error:", err));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
